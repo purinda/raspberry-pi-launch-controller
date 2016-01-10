@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from Tkinter import *
+import tkMessageBox
 from widgets import StatusBar
 from functools import partial
 import socket
@@ -31,13 +32,20 @@ class ScreenLogin(Tk):
         self.master.after(1000, self.refresh_timer)
 
     def process_key(self, key):
-        logging.debug('Key Pressed: ' + key)
+        logging.debug('Button Pressed: ' + key)
 
         if (key == 'Clear'):
             self.pin_entry.delete(0, END)
+            return None
 
         if (key == 'Login'):
+            if self.pin_entry.get() == '2117':
+                tkMessageBox.showinfo(title="Welcome", message="Login successful, initiating launch system.")
+            else:
+                tkMessageBox.showwarning(title="Invalid attempt", message="Incorrect! please try again.")
+
             self.pin_entry.delete(0, END)
+            return None
 
         self.pin_entry.insert(END, key)
 
