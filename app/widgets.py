@@ -2,9 +2,9 @@ from Tkinter import *
 
 class StatusBar(Frame):
 
-    def __init__(self, master):
+    def __init__(self, master, **options):
         Frame.__init__(self, master)
-        self.label = Label(self, bd=1, relief=SUNKEN, anchor=W)
+        self.label = Label(self, **options)
         self.label.pack(fill=X)
 
     def set(self, format, *args):

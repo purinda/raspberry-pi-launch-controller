@@ -27,6 +27,7 @@ def main():
     root_window.minsize(240, 320)
     root_window.maxsize(240, 320)
     showLogin(root_window)
+    root_window.mainloop()
 
 
 if __name__ == '__main__':
