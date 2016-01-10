@@ -1,7 +1,7 @@
+# -*- coding: utf-8 -*-
 from Tkinter import *
 from widgets import StatusBar
 import socket
-
 
 class ScreenLogin():
     def __init__(self, master, q_visibility):
@@ -51,6 +51,6 @@ class ScreenLogin():
 
         pinentry_form = Frame(self.master)
         pinentry_form.pack(side=TOP, fill=BOTH)
-        Entry(pinentry_form).pack(side=BOTTOM)
+        Entry(pinentry_form, state="readonly", show="•", font="Helvetica 24 bold", justify="center").pack(side=BOTTOM)
 
         self.reload_timer()
