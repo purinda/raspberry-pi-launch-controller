@@ -51,6 +51,6 @@ class ScreenLogin():
 
         pinentry_form = Frame(self.master)
         pinentry_form.pack(side=TOP, fill=BOTH)
-        Entry(pinentry_form).pack(side=LEFT)
+        Entry(pinentry_form).pack(side=BOTTOM)
 
         self.reload_timer()
