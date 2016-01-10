@@ -5,6 +5,7 @@ from Tkinter import Tk
 from app.polling_thread import PollingThread
 from app.screen_login import ScreenLogin
 import Queue
+import RPi.GPIO as GPIO
 import logging
 
 logging.basicConfig(level=logging.DEBUG,
@@ -32,4 +33,11 @@ def main():
 
 if __name__ == '__main__':
     logging.debug(__name__)
-    main()
+    try:
+        main()  
+    except KeyboardInterrupt:
+        logging.debug('Cleaning up GPIO registers...')
+
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.cleanup()
+

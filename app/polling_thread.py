@@ -1,5 +1,10 @@
 import threading
 import time
+import RPi.GPIO as GPIO
+
+# System On/Off GPIO (Board PIN)
+PIN_ONOFF = 32
+LED_ONLINE = 35
 
 class PollingThread(threading.Thread):
     """
@@ -13,18 +18,26 @@ class PollingThread(threading.Thread):
         threading.Thread.__init__(self)
 
         self.logging = logging
-        self.timestamp = 0
-        self.gpio_value = 0
+        self.timestamp = None
+        self.gpio_value = None
         self.q_visibility = q_visibility
+		
+        # Setup GPIO
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(PIN_ONOFF, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(LED_ONLINE, GPIO.OUT)
 
     def run(self):
         while True:
             time.sleep(1)
-
-            if round(self.timestamp) % 5:
-                self.q_visibility.put('SHOW')
-            else:
+            self.gpio_value = GPIO.input(PIN_ONOFF)
+            
+            if self.gpio_value:
                 self.q_visibility.put('HIDE')
+                GPIO.output(LED_ONLINE, GPIO.LOW)
+            else:
+                self.q_visibility.put('SHOW')
+                GPIO.output(LED_ONLINE, GPIO.HIGH)
 
             self.timestamp = time.time()
-            self.logging.debug("GPIO Status [" + str(self.gpio_value) + '] @ ' + str(round(self.timestamp) % 5))
+            self.logging.debug("GPIO Status [" + str(self.gpio_value) + '] @ ' + str(round(self.timestamp)))
