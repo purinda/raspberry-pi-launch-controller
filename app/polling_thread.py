@@ -11,7 +11,6 @@ class PollingThread(threading.Thread):
 
     def __init__(self, q_visibility, logging):
         threading.Thread.__init__(self)
-        threading.Thread.name = 'OnOff Interrupt'
 
         self.logging = logging
         self.timestamp = 0
