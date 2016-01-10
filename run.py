@@ -11,15 +11,15 @@ logging.basicConfig(level=logging.DEBUG,
                     format='(%(threadName)-10s) %(message)s', )
 
 # Message passing queue for the OnOffThread
-q_status = Queue.Queue()
+q_visibility = Queue.Queue()
 
 
 def showLogin(root_window):
-    login = ScreenLogin(root_window)
+    login = ScreenLogin(root_window, q_visibility)
     login.show()
 
 def main():
-    myThread = PollingThread(q_status, logging)
+    myThread = PollingThread(q_visibility, logging)
     myThread.start()
 
     root_window = Tk()
