@@ -4,7 +4,7 @@ import RPi.GPIO as GPIO
 
 # System On/Off GPIO (Board PIN)
 PIN_ONOFF = 32
-LED_ONLINE = 35
+LED_ONLINE = 31
 
 class PollingThread(threading.Thread):
     """

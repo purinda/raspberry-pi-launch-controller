@@ -25,8 +25,8 @@ def main():
 
     root_window = Tk()
     root_window.title('Phoenix Launch Controller')
-    root_window.minsize(240, 320)
-    root_window.maxsize(240, 320)
+    root_window.minsize(240, 300)
+    root_window.maxsize(240, 300)
     showLogin(root_window)
     root_window.mainloop()
 

@@ -1,14 +1,28 @@
 # -*- coding: utf-8 -*-
 from Tkinter import *
 import tkMessageBox
+import RPi.GPIO as GPIO
 from widgets import StatusBar
 from functools import partial
-import socket
 import logging
+
+import socket
+import fcntl
+import struct
+
 
 logging.basicConfig(level=logging.DEBUG,
                     format='(%(threadName)-10s) %(message)s', )
 
+LED_LAUNCHREADY = 35
+
+def get_ip_address(ifname):
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    return socket.inet_ntoa(fcntl.ioctl(
+        s.fileno(),
+        0x8915,  # SIOCGIFADDR
+        struct.pack('256s', ifname[:15])
+    )[20:24])
 
 class ScreenLogin(Tk):
     def __init__(self, master, q_visibility):
@@ -19,8 +33,13 @@ class ScreenLogin(Tk):
         self.statusbar = StatusBar(self.master, bd=1, relief=SUNKEN, anchor=CENTER)
         self.statusbar.pack(side=BOTTOM, fill=X)
 
+        # Setup GPIO
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(LED_LAUNCHREADY, GPIO.OUT)
+    
     def refresh_timer(self):
-        self.statusbar.set('Local IP: %s', socket.gethostbyname(socket.gethostname()))
+
+        self.statusbar.set('Local IP: %s', get_ip_address('eth0'))
         status = self.q_visibility.get()
 
         if status == 'SHOW':
@@ -40,9 +59,11 @@ class ScreenLogin(Tk):
 
         if (key == 'Login'):
             if self.pin_entry.get() == '2117':
-                tkMessageBox.showinfo(title="Welcome", message="Login successful, initiating launch system.")
+                tkMessageBox.showinfo(title="Welcome", message="Launch Ready")
+                GPIO.output(LED_LAUNCHREADY, GPIO.HIGH)
             else:
-                tkMessageBox.showwarning(title="Invalid attempt", message="Incorrect! please try again.")
+                tkMessageBox.showwarning(title="Invalid attempt", message="Incorrect!")
+                GPIO.output(LED_LAUNCHREADY, GPIO.LOW)
 
             self.pin_entry.delete(0, END)
             return None
