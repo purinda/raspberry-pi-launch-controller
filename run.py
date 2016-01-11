@@ -11,7 +11,7 @@ import logging
 logging.basicConfig(level=logging.DEBUG,
                     format='(%(threadName)-10s) %(message)s', )
 
-# Message passing queue for the OnOffThread
+# Message passing queue for the polling thread
 q_visibility = Queue.Queue()
 
 
